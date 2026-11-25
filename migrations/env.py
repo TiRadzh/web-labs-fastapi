@@ -3,6 +3,7 @@ from alembic import context
 from sqlalchemy.ext.asyncio import create_async_engine
 from app.core.config import DATABASE_URL
 from app.db.base import Base
+import app.models.attachment  # noqa: F401
 import app.models.task  # noqa: F401
 
 def run(connection):
@@ -22,3 +23,4 @@ if context.is_offline_mode():
         context.run_migrations()
 else:
     asyncio.run(main())
+

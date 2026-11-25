@@ -20,3 +20,4 @@ class Task(Base):
     project = relationship('Project', back_populates='tasks')
     tags = relationship('Tag', secondary=task_tags, lazy='selectin')
     comments = relationship('Comment', cascade='all, delete-orphan')
+    attachments = relationship("Attachment", cascade="all, delete-orphan")

@@ -39,8 +39,11 @@ async def delete_task(session: AsyncSession, task_id: int) -> bool:
 from sqlalchemy import func
 from app.models.entities import Tag
 from app.schemas.tasks import TaskRead
-async def page_tasks(session,page,size,status,project_id,tag,sort_by,order):
+async def page_tasks(session,page,size,status,project_id,tag,sort_by,order,user=None):
     stmt=select(Task)
+    if user is not None and user.role!="admin":
+        from app.models.entities import Project
+        stmt=stmt.where(Task.project.has(Project.owner_id==user.id))
     if status: stmt=stmt.where(Task.status==status)
     if project_id is not None: stmt=stmt.where(Task.project_id==project_id)
     if tag: stmt=stmt.where(Task.tags.any(Tag.name==tag))

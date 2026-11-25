@@ -1,4 +1,4 @@
-# Task Manager API — lab-09-docker
+# Task Manager API — lab-10-cicd
 Python 3.11, FastAPI, SQLAlchemy, Alembic.
 
 ```powershell

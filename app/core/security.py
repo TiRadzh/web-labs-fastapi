@@ -1,4 +1,4 @@
-import os
+from app.core.config import settings
 from datetime import datetime, timedelta, timezone
 import jwt
 from pwdlib import PasswordHash
@@ -7,7 +7,7 @@ from fastapi.security import HTTPBearer
 from app.db.session import get_session
 from app.models.entities import User
 passwords=PasswordHash.recommended()
-secret=os.getenv('APP_SECRET_KEY','local-development-only-change-this-key')
+secret=settings.app_secret_key
 bearer=HTTPBearer(auto_error=False)
 def token(user,kind):
     return jwt.encode({'sub':str(user.id),'kind':kind,'exp':datetime.now(timezone.utc)+timedelta(minutes=30 if kind=='access' else 10080)},secret,algorithm='HS256')

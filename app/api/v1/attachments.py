@@ -1,4 +1,5 @@
-import os, logging
+import logging
+from app.core.config import settings
 from pathlib import Path
 from uuid import uuid4
 from fastapi import APIRouter, Depends, UploadFile, BackgroundTasks, HTTPException, Response
@@ -8,7 +9,7 @@ from app.api.v1.entities import Session,check_task,find,save
 from app.core.security import get_current_user
 from app.models.attachment import Attachment
 router=APIRouter()
-folder=Path(os.getenv('UPLOAD_DIR','uploads'))
+folder=Path(settings.upload_dir)
 allowed={'.txt':'text/plain','.pdf':'application/pdf','.png':'image/png','.jpg':'image/jpeg'}
 def metadata(obj):
     return {k:getattr(obj,k) for k in ('id','filename','content_type','size','task_id','user_id','created_at')}

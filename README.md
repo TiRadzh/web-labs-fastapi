@@ -1,4 +1,4 @@
-# Task Manager API — lab-07-tests
+# Task Manager API — lab-08-architecture
 Python 3.11, FastAPI, SQLAlchemy, Alembic.
 
 ```powershell

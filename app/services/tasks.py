@@ -34,3 +34,17 @@ async def delete_task(session: AsyncSession, task_id: int) -> bool:
     await session.delete(task)
     await session.commit()
     return True
+
+
+from sqlalchemy import func
+from app.models.entities import Tag
+from app.schemas.tasks import TaskRead
+async def page_tasks(session,page,size,status,project_id,tag,sort_by,order):
+    stmt=select(Task)
+    if status: stmt=stmt.where(Task.status==status)
+    if project_id is not None: stmt=stmt.where(Task.project_id==project_id)
+    if tag: stmt=stmt.where(Task.tags.any(Tag.name==tag))
+    total=await session.scalar(select(func.count()).select_from(stmt.subquery()))
+    col=getattr(Task,sort_by)
+    rows=(await session.scalars(stmt.order_by(col.desc() if order=='desc' else col.asc(),Task.id).offset((page-1)*size).limit(size))).all()
+    return dict(items=[TaskRead.model_validate(x) for x in rows],total=total,page=page,size=size,pages=(total+size-1)//size)

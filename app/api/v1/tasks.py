@@ -1,3 +1,5 @@
+from fastapi import Query
+from typing import Literal
 from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, Response, status
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -8,9 +10,9 @@ from app.services import tasks as service
 router = APIRouter(prefix="/tasks", tags=["Tasks"])
 Session = Annotated[AsyncSession, Depends(get_session)]
 
-@router.get("", response_model=list[TaskRead])
-async def get_tasks(session: Session):
-    return await service.list_tasks(session)
+@router.get("")
+async def get_tasks(session: Session, page: int=Query(1,ge=1), size: int=Query(10,ge=1,le=100), status: str|None=None, project_id: int|None=None, tag: str|None=None, sort_by: Literal['id','created_at','title']='id', order: Literal['asc','desc']='asc'):
+    return await service.page_tasks(session,page,size,status,project_id,tag,sort_by,order)
 
 @router.get("/{task_id}", response_model=TaskRead)
 async def get_task(task_id: int, session: Session):

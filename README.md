@@ -1,4 +1,4 @@
-# Task Manager API — lab-03-alembic
+# Task Manager API — lab-04-relations
 Python 3.11, FastAPI, SQLAlchemy, Alembic.
 
 ```powershell

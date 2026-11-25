@@ -11,6 +11,7 @@ class TaskCreate(BaseModel):
 
 class TaskRead(TaskCreate):
     id: int
+    project_id: int | None = None
     created_at: datetime
     updated_at: datetime
     model_config = ConfigDict(from_attributes=True)

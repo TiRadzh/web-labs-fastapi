@@ -8,3 +8,9 @@ SessionLocal = async_sessionmaker(engine, expire_on_commit=False)
 async def get_session() -> AsyncGenerator[AsyncSession, None]:
     async with SessionLocal() as session:
         yield session
+
+from sqlalchemy import event
+if DATABASE_URL.startswith("sqlite"):
+    @event.listens_for(engine.sync_engine, "connect")
+    def enable_fk(connection, record):
+        cursor=connection.cursor(); cursor.execute("PRAGMA foreign_keys=ON"); cursor.close()

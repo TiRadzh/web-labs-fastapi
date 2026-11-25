@@ -1,17 +1,13 @@
-# Лабораторная работа №2: асинхронная SQLite через SQLAlchemy
-
-Это продолжение первой лабораторной с теми же пятью маршрутами. Python 3.11+. Из корня проекта в PowerShell:
+# Task Manager API — lab-03-alembic
+Python 3.11, FastAPI, SQLAlchemy, Alembic.
 
 ```powershell
-py -m venv .venv
-.venv\Scripts\Activate.ps1
-pip install -r requirements.txt
-Copy-Item .env.example .env
-uvicorn app.main:app --reload
+python -m pip install -r requirements.txt
+alembic upgrade head
+python -m uvicorn app.main:app --reload
 ```
+Swagger: http://127.0.0.1:8000/docs
 
-Документация: http://127.0.0.1:8000/docs
-Тестирование: `pytest -q`. Данные хранятся в файле `app.db` и остаются после перезапуска.
+Тесты: `python -m pytest`. DATABASE_URL задаёт адрес БД (по умолчанию SQLite). APP_SECRET_KEY — секрет JWT, UPLOAD_DIR — папка вложений. Для существующей БД ЛР2 без alembic_version сначала сделайте резервную копию и выполните `alembic stamp 0001`, только если схема соответствует ЛР2.
 
-SQLite создаётся автоматически при запуске приложения. Для лабораторной №3 вместо `create_all` будут введены миграции Alembic.
-Рекомендуемая ветка Git: `lab-02-database`. Не публикуйте `.env` и `app.db`.
+Учебная версия: используйте отдельную БД для каждой ветки либо применяйте миграции последовательно. Перед откатом сохраните резервную копию.
